@@ -16,23 +16,23 @@ This is a small example of how to do that:
 ```go
 // datastore/datastore.go
 type Repository interface {
-    Post() PostRepository
-    User() UserRepository
+	Post() PostRepository
+	User() UserRepository
 }
 
 type PostRepository interface {
-    Find(id int) (*Post, error)
-    Save(post *Post) error
+	Find(id int) (*Post, error)
+	Save(post *Post) error
 }
 
 type UserRepository interface {
-    Find(id int) (*User, error)
-    Save(user *User) error
+	Find(id int) (*User, error)
+	Save(user *User) error
 }
 
 type repository struct {
-    post PostRepository
-    user UserRepository
+	post PostRepository
+	user UserRepository
 }
 
 // datastore/mongo/mongo.go
@@ -40,12 +40,12 @@ var _ datastore.Repository = (*MongoRepository)(nil)
 
 func New() *MongoRepository {
 	client, _ := mongo.NewClient(options.Client().ApplyURI("mongodb://localhost:27017"))
-    return &MongoRepository{
+	return &MongoRepository{
 		db: client,
 
-        post: NewMongoPostRepository(client),
-        user: NewMongoUserRepository(client),
-    }
+		post: NewMongoPostRepository(client),
+		user: NewMongoUserRepository(client),
+	}
 }
 
 type MongoRepository struct {
@@ -61,12 +61,12 @@ var _ datastore.Repository = (*MongoRepository)(nil)
 
 func New() *MongoRepository {
 	client, _ := sql.Open("mysql", "user:password@localhost:3306/db")
-    return &MongoRepository{
+	return &MongoRepository{
 		db: client,
 
-        post: NewMySQLPostRepository(client),
-        user: NewMySQLUserRepository(client),
-    }
+		post: NewMySQLPostRepository(client),
+		user: NewMySQLUserRepository(client),
+	}
 }
 
 type MySQLRepository struct {
@@ -91,12 +91,12 @@ Which ends up looking like this:
 
 ```go
 func main() {}
-    nic := network.New(
-        bluetooth.New(bluetooth.BLEEnabled), // transmission method (TransmissionTypeable)
-        physical.New("bnet0", "0xB10E70074"), // hardware interface (InterfaceTypeable)
-    )
-    
-    // ...
+	nic := network.New(
+		bluetooth.New(bluetooth.BLEEnabled), // transmission method (TransmissionTypeable)
+		physical.New("bnet0", "0xB10E70074"), // hardware interface (InterfaceTypeable)
+	)
+	
+	// ...
 }
 ```
 
