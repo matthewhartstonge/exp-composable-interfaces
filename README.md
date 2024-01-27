@@ -39,13 +39,20 @@ type repository struct {
 var _ datastore.Repository = (*MongoRepository)(nil)
 
 func New() *MongoRepository {
+	client, _ := mongo.NewClient(options.Client().ApplyURI("mongodb://localhost:27017"))
     return &MongoRepository{
-        post: NewMongoPostRepository(),
-        user: NewMongoUserRepository(),
+		db: client,
+
+        post: NewMongoPostRepository(client),
+        user: NewMongoUserRepository(client),
     }
 }
 
 type MongoRepository struct {
+	db *mongo.Client
+	
+	post PostRepository
+	user UserRepository
 	// ...
 }
 
@@ -53,13 +60,20 @@ type MongoRepository struct {
 var _ datastore.Repository = (*MongoRepository)(nil)
 
 func New() *MongoRepository {
+	client, _ := sql.Open("mysql", "user:password@localhost:3306/db")
     return &MongoRepository{
-        post: NewMySQLPostRepository(),
-        user: NewMySQLUserRepository(),
+		db: client,
+
+        post: NewMySQLPostRepository(client),
+        user: NewMySQLUserRepository(client),
     }
 }
 
 type MySQLRepository struct {
+	db *sql.DB
+	
+	post PostRepository
+	user UserRepository
 	// ...
 }
 ```
